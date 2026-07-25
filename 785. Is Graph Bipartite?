@@ -1,0 +1,67 @@
+# Is Graph Bipartite?
+
+## Difficulty
+Medium
+
+## Approach
+Use **Breadth-First Search (BFS)** to color the graph with two colors.
+
+Maintain an array `odd` where:
+- `0` → node has not been colored.
+- `-1` and `1` → the two different colors.
+
+For every unvisited node:
+1. Start a BFS and assign it a color.
+2. For each neighbor:
+   - If it has the same color as the current node, the graph is **not bipartite**.
+   - If it has not been colored yet, assign it the opposite color and add it to the queue.
+
+Since the graph may be disconnected, start a BFS from every uncolored node.
+
+If all connected components can be colored without conflicts, return `True`.
+
+## Complexity
+- **Time Complexity:** `O(V + E)`
+- **Space Complexity:** `O(V)`
+
+where:
+- `V` = number of vertices
+- `E` = number of edges
+
+Each vertex is visited once, and every edge is examined once.
+
+## Code
+
+```python
+from collections import deque
+
+class Solution:
+    def isBipartite(self, graph):
+        odd = [0] * len(graph)
+
+        def bfs(i):
+            if odd[i]:
+                return True
+
+            q = deque([i])
+            odd[i] = -1
+
+            while q:
+                i = q.popleft()
+
+                for nei in graph[i]:
+                    if odd[nei] == odd[i]:
+                        return False
+
+                    elif not odd[nei]:
+                        q.append(nei)
+                        odd[nei] = -odd[i]
+
+            return True
+
+        for i in range(len(graph)):
+            if not bfs(i):
+                return False
+
+        return True
+```
