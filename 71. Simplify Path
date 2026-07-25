@@ -1,0 +1,48 @@
+# Simplify Path
+
+## Difficulty
+Medium
+
+## Approach
+Use a **stack** to simulate navigating through directories.
+
+Traverse the path character by character and build the current directory name until a `'/'` is encountered.
+
+When a complete directory name is formed:
+- If it is `".."`:
+  - Move to the parent directory by popping from the stack (if possible).
+- If it is `"."` or an empty string:
+  - Ignore it, since `"."` represents the current directory and consecutive slashes produce empty directory names.
+- Otherwise:
+  - Push the directory name onto the stack.
+
+Finally, join all directories in the stack with `'/'` and prepend a leading slash to obtain the simplified absolute path.
+
+## Complexity
+- **Time Complexity:** `O(n)`
+- **Space Complexity:** `O(n)`
+
+where `n` is the length of the input path.
+
+## Code
+
+```python
+class Solution:
+    def simplifyPath(self, path):
+        stack = []
+        curr = ""
+
+        for c in path + "/":
+            if c == "/":
+                if curr == "..":
+                    if stack:
+                        stack.pop()
+                elif curr != "" and curr != ".":
+                    stack.append(curr)
+
+                curr = ""
+            else:
+                curr += c
+
+        return "/" + "/".join(stack)
+```
