@@ -1,0 +1,47 @@
+# Happy Number
+
+## Difficulty
+Easy
+
+## Approach
+Repeatedly replace the number with the sum of the squares of its digits.
+
+Maintain a hash set to detect cycles:
+- Compute the sum of the squares of the digits.
+- If the sum becomes `1`, the number is happy.
+- If the sum has been seen before, the process is repeating in a cycle, so the number is not happy.
+- Otherwise, add the sum to the hash set and continue.
+
+The hash set guarantees that the algorithm terminates by detecting repeated states.
+
+## Complexity
+
+Let `d` be the number of digits in `n`.
+
+- **Time Complexity:** `O(log n)`
+- **Space Complexity:** `O(log n)`
+
+Each iteration processes all digits (`O(d)`), and the sequence quickly reaches a bounded range, so only a limited number of distinct values are stored.
+
+## Code
+
+```python
+class Solution(object):
+    def isHappy(self, n):
+        hashset = set()
+
+        while True:
+            output = 0
+
+            for digit in str(n):
+                output += int(digit) ** 2
+
+            if output == 1:
+                return True
+
+            if output not in hashset:
+                hashset.add(output)
+                n = output
+            else:
+                return False
+```
