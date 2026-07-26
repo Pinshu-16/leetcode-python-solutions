@@ -1,0 +1,48 @@
+# Transpose Matrix
+
+## Difficulty
+Easy
+
+## Approach
+Create a new matrix with swapped dimensions.
+
+If the original matrix has:
+- `rows` rows
+- `cols` columns
+
+then the transposed matrix will have:
+- `cols` rows
+- `rows` columns
+
+Traverse every element in the original matrix and place it in its transposed position:
+
+```text
+output[c][r] = matrix[r][c]
+```
+
+This swaps the row and column indices for every element.
+
+## Complexity
+Let:
+- `m` = number of rows
+- `n` = number of columns
+
+- **Time Complexity:** `O(m × n)`
+- **Space Complexity:** `O(m × n)`
+
+A new matrix of size `n × m` is created.
+
+## Code
+
+```python
+class Solution:
+    def transpose(self, matrix):
+        rows, cols = len(matrix), len(matrix[0])
+        output = [[0] * rows for _ in range(cols)]
+
+        for r in range(rows):
+            for c in range(cols):
+                output[c][r] = matrix[r][c]
+
+        return output
+```
