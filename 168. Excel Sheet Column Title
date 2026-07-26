@@ -1,0 +1,45 @@
+# Excel Sheet Column Title
+
+## Difficulty
+Easy
+
+## Approach
+Treat the column number as a **base-26** number, but with one important difference:
+
+- Excel columns are **1-indexed** (`A = 1`, ..., `Z = 26`).
+- Therefore, before taking the remainder, subtract `1` from the current number.
+
+Repeat until the column number becomes `0`:
+1. Compute the current letter using:
+   ```text
+   offset = (columnNumber - 1) % 26
+   ```
+2. Convert the offset to its corresponding uppercase letter.
+3. Prepend the letter to the answer.
+4. Update:
+   ```text
+   columnNumber = (columnNumber - 1) // 26
+   ```
+
+The resulting string is the Excel column title.
+
+## Complexity
+- **Time Complexity:** `O(log₍₂₆₎ n)`
+- **Space Complexity:** `O(log₍₂₆₎ n)`
+
+where `n` is the given column number.
+
+## Code
+
+```python
+class Solution:
+    def convertToTitle(self, columnNumber):
+        output = ""
+
+        while columnNumber > 0:
+            offset = (columnNumber - 1) % 26
+            output = chr(ord("A") + offset) + output
+            columnNumber = (columnNumber - 1) // 26
+
+        return output
+```
