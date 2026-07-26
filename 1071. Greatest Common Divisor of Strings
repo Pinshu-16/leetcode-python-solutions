@@ -1,0 +1,58 @@
+# Greatest Common Divisor of Strings
+
+## Difficulty
+Easy
+
+## Approach
+A valid divisor string must:
+- Divide both strings completely.
+- Reconstruct both strings when repeated the appropriate number of times.
+
+Let:
+- `len1 = len(str1)`
+- `len2 = len(str2)`
+
+Try every possible divisor length from `min(len1, len2)` down to `1`.
+
+For each candidate length `l`:
+1. If either string length is not divisible by `l`, it cannot be the answer.
+2. Take the prefix `str1[:l]` as the candidate divisor.
+3. Repeat it enough times to rebuild both strings.
+4. If it reconstructs both strings exactly, return the candidate.
+
+Since lengths are checked from largest to smallest, the first valid divisor found is the greatest common divisor string.
+
+## Complexity
+Let:
+- `n = len(str1)`
+- `m = len(str2)`
+
+- **Time Complexity:** `O(min(n, m) × (n + m))`
+- **Space Complexity:** `O(n + m)`
+
+The extra space comes from creating repeated strings for comparison.
+
+## Code
+
+```python
+class Solution:
+    def gcdOfStrings(self, str1, str2):
+        len1, len2 = len(str1), len(str2)
+
+        def isDivisor(l):
+            if len1 % l or len2 % l:
+                return False
+
+            f1, f2 = len1 // l, len2 // l
+
+            return (
+                str1[:l] * f1 == str1 and
+                str1[:l] * f2 == str2
+            )
+
+        for l in range(min(len1, len2), 0, -1):
+            if isDivisor(l):
+                return str1[:l]
+
+        return ""
+```
