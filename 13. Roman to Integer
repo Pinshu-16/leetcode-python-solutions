@@ -1,0 +1,50 @@
+# Roman to Integer
+
+## Difficulty
+Easy
+
+## Approach
+Use a hash map to store the integer value of each Roman numeral.
+
+Traverse the string from left to right.
+
+For each character:
+- If the next Roman numeral exists and has a larger value, the current numeral is part of a subtractive pair (e.g., `IV`, `IX`), so subtract its value from the answer.
+- Otherwise, add its value to the answer.
+
+This correctly handles both normal and subtractive Roman numeral representations.
+
+## Complexity
+
+Let `n` be the length of the string.
+
+- **Time Complexity:** `O(n)`
+- **Space Complexity:** `O(1)`
+
+The hash map contains only the seven Roman numerals.
+
+## Code
+
+```python
+class Solution:
+    def romanToInt(self, s):
+        roman = {
+            "I": 1,
+            "V": 5,
+            "X": 10,
+            "L": 50,
+            "C": 100,
+            "D": 500,
+            "M": 1000
+        }
+
+        output = 0
+
+        for i in range(len(s)):
+            if i + 1 < len(s) and roman[s[i]] < roman[s[i + 1]]:
+                output -= roman[s[i]]
+            else:
+                output += roman[s[i]]
+
+        return output
+```
