@@ -1,0 +1,43 @@
+# Insert Greatest Common Divisors in Linked List
+
+## Difficulty
+Medium
+
+## Approach
+Traverse the linked list one pair of adjacent nodes at a time.
+
+For each pair:
+1. Compute the **Greatest Common Divisor (GCD)** of the two node values using the Euclidean algorithm.
+2. Create a new node containing the GCD.
+3. Insert the new node between the current node and the next node.
+4. Move to the next original node and repeat.
+
+The Euclidean algorithm repeatedly replaces `(a, b)` with `(b, a % b)` until `b` becomes `0`. The remaining value of `a` is the GCD.
+
+## Complexity
+Let `n` be the number of nodes in the linked list.
+
+- **Time Complexity:** `O(n · log M)`
+- **Space Complexity:** `O(1)`
+
+where `M` is the maximum node value. Each GCD computation takes `O(log M)` time.
+
+## Code
+
+```python
+class Solution:
+    def insertGreatestCommonDivisors(self, head):
+        def gcd(a, b):
+            while b > 0:
+                a, b = b, a % b
+            return a
+
+        curr = head
+
+        while curr.next:
+            n1, n2 = curr.val, curr.next.val
+            curr.next = ListNode(gcd(n1, n2), curr.next)
+            curr = curr.next.next
+
+        return head
+```
