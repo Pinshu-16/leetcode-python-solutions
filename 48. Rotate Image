@@ -1,0 +1,58 @@
+# Rotate Image]
+
+## Difficulty
+Medium
+
+## Approach
+Rotate the matrix **90° clockwise in-place** by processing one layer at a time.
+
+Use two pointers:
+- `l` → left boundary of the current layer.
+- `r` → right boundary of the current layer.
+
+For each layer:
+1. Iterate through each element on the top edge (excluding the last).
+2. Save the **top-left** value.
+3. Perform a 4-way swap:
+   - Left → Top
+   - Bottom → Left
+   - Right → Bottom
+   - Saved Top → Right
+4. After processing the layer, move the boundaries inward.
+
+Since every element is moved directly to its final position, the rotation is performed in-place without using extra space.
+
+## Complexity
+
+Let `n` be the size of the `n × n` matrix.
+
+- **Time Complexity:** `O(n²)`
+- **Space Complexity:** `O(1)`
+
+Every element is moved exactly once.
+
+## Code
+
+```python
+class Solution(object):
+    def rotate(self, matrix):
+        l = 0
+        r = len(matrix[0]) - 1
+
+        while l < r:
+            for i in range(r - l):
+                top, bottom = l, r
+
+                topLeft = matrix[top][l + i]
+
+                matrix[top][l + i] = matrix[bottom - i][l]
+
+                matrix[bottom - i][l] = matrix[bottom][r - i]
+
+                matrix[bottom][r - i] = matrix[top + i][r]
+
+                matrix[top + i][r] = topLeft
+
+            l += 1
+            r -= 1
+```
