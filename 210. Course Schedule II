@@ -1,24 +1,75 @@
-def findOrder(self, numCourses, prerequisites):
-        preMap = { i:[] for i in range(numCourses)}
-        for crs,pre in prerequisites:
+# [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/)
+
+## Difficulty
+Medium
+
+## Approach
+Model the courses as a directed graph.
+
+- Each course is a node.
+- An edge `course → prerequisite` indicates that the prerequisite must be completed before taking the course.
+
+Use **DFS-based Topological Sort** with cycle detection.
+
+Maintain two sets:
+- `cycle`: courses currently in the recursion stack.
+- `visit`: courses that have already been processed.
+
+For each course:
+1. If it is already in `cycle`, a cycle exists, so no valid ordering is possible.
+2. If it has already been processed, skip it.
+3. Recursively process all of its prerequisites.
+4. After all prerequisites are processed, remove the course from `cycle`, mark it as visited, and add it to the answer.
+
+Since a course is added to the output only after all of its prerequisites have been added, the resulting list is a valid course ordering.
+
+## Complexity
+
+Let:
+- `V` = number of courses
+- `E` = number of prerequisite pairs
+
+- **Time Complexity:** `O(V + E)`
+- **Space Complexity:** `O(V + E)`
+
+Each course is visited once, and each prerequisite edge is traversed once.
+
+## Code
+
+```python
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        preMap = {i: [] for i in range(numCourses)}
+
+        for crs, pre in prerequisites:
             preMap[crs].append(pre)
-        
+
+        cycle = set()
+        visit = set()
         output = []
-        visit,cycle = set(),set()
+
         def dfs(crs):
             if crs in cycle:
                 return False
+
             if crs in visit:
                 return True
+
             cycle.add(crs)
+
             for pre in preMap[crs]:
                 if not dfs(pre):
-                    return False 
+                    return False
+
             cycle.remove(crs)
             visit.add(crs)
             output.append(crs)
+
             return True
+
         for crs in range(numCourses):
             if not dfs(crs):
                 return []
+
         return output
+```
