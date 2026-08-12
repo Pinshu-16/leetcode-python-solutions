@@ -1,0 +1,62 @@
+# Find Median from Data Stream
+
+## Difficulty
+Hard
+
+## Approach
+Use **two heaps** to maintain the lower and upper halves of the numbers:
+
+- `small` → **max heap** containing the smaller half. Python's `heapq` is a min heap, so store negative values.
+- `large` → **min heap** containing the larger half.
+
+Maintain two invariants:
+1. Every value in `small` is `<=` every value in `large`.
+2. The sizes of the two heaps differ by at most `1`.
+
+### `addNum(num)`
+1. Add the number to `small`.
+2. If the largest value in `small` is greater than the smallest value in `large`, move it to `large`.
+3. Rebalance the heaps if their sizes differ by more than `1`.
+
+### `findMedian()`
+- If `small` has more elements, its top is the median.
+- If `large` has more elements, its top is the median.
+- If they have equal sizes, the median is the average of their two top elements.
+
+## Complexity
+- **`addNum`:** `O(log n)`
+- **`findMedian`:** `O(1)`
+- **Space Complexity:** `O(n)`
+
+## Code
+
+```python
+class MedianFinder:
+
+    def __init__(self):
+        self.small, self.large = [], []
+
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.small, -num)
+
+        if self.small and self.large and (-self.small[0] > self.large[0]):
+            val = -heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+
+        if len(self.small) > len(self.large) + 1:
+            val = -heapq.heappop(self.small)
+            heapq.heappush(self.large, val)
+
+        if len(self.large) > len(self.small) + 1:
+            val = heapq.heappop(self.large)
+            heapq.heappush(self.small, -val)
+
+    def findMedian(self) -> float:
+        if len(self.small) > len(self.large):
+            return -self.small[0]
+
+        elif len(self.large) > len(self.small):
+            return self.large[0]
+
+        else:
+            return (-self.small[0] + self.large[0]) / 2
